@@ -1,21 +1,23 @@
 
 import React, { useState, useEffect } from "react";
-import { fetchMarketMovers, MarketData } from "../services/alphaVantageService";
+import { fetchMarketMovers, MarketData, MarketSymbol } from "../services/alphaVantageService";
 import LosersElevator from "./LosersElevator";
 import GainersStairs from "./GainersStairs";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, AlertCircle } from "lucide-react";
+import { RefreshCw, AlertCircle, TrendingDown, TrendingUp, BarChart3 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import SymbolDetail from "./SymbolDetail";
-import { MarketSymbol } from "@/services/alphaVantageService";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const MarketTicker: React.FC = () => {
+interface MarketTickerProps {
+  onSymbolSelect: (symbol: MarketSymbol) => void;
+}
+
+const MarketTicker: React.FC<MarketTickerProps> = ({ onSymbolSelect }) => {
   const [marketData, setMarketData] = useState<MarketData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedSymbol, setSelectedSymbol] = useState<MarketSymbol | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("all");
   const { toast } = useToast();
 
   // Fetch market data on component mount and periodically
@@ -78,13 +80,6 @@ const MarketTicker: React.FC = () => {
     ? new Date(marketData.timestamp).toLocaleTimeString()
     : "";
 
-  // Handle symbol click to open details
-  const handleSymbolClick = (symbol: MarketSymbol) => {
-    console.log("Symbol clicked:", symbol);
-    setSelectedSymbol(symbol);
-    setDetailsOpen(true);
-  };
-
   return (
     <div className="h-full flex flex-col">
       <div className="flex justify-between items-center p-4 bg-market-dark border-b border-market-grid">
@@ -132,31 +127,79 @@ const MarketTicker: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 overflow-hidden">
-          {marketData && (
-            <>
-              <div className="h-[600px] md:h-full">
-                <LosersElevator 
-                  losers={marketData.losers} 
-                  onSymbolClick={handleSymbolClick} 
-                />
+        <div className="flex-1 flex flex-col">
+          <Tabs
+            defaultValue="all"
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="grid grid-cols-3 p-1 bg-gray-800 w-80 mx-auto my-2">
+              <TabsTrigger value="all" className="flex items-center gap-1">
+                <BarChart3 size={14} />
+                <span>All</span>
+              </TabsTrigger>
+              <TabsTrigger value="down" className="flex items-center gap-1 text-market-down">
+                <TrendingDown size={14} />
+                <span>Losers</span>
+              </TabsTrigger>
+              <TabsTrigger value="up" className="flex items-center gap-1 text-market-up">
+                <TrendingUp size={14} />
+                <span>Gainers</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="all" className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 h-[calc(100vh-300px)] overflow-hidden">
+                {marketData && (
+                  <>
+                    <div className="h-full">
+                      <LosersElevator 
+                        losers={marketData.losers} 
+                        onSymbolClick={onSymbolSelect} 
+                      />
+                    </div>
+                    <div className="h-full">
+                      <GainersStairs 
+                        gainers={marketData.gainers} 
+                        onSymbolClick={onSymbolSelect}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
-              <div className="h-[600px] md:h-full">
-                <GainersStairs 
-                  gainers={marketData.gainers} 
-                  onSymbolClick={handleSymbolClick}
-                />
+            </TabsContent>
+            
+            <TabsContent value="down" className="mt-0">
+              <div className="p-4 h-[calc(100vh-300px)] overflow-hidden">
+                {marketData && (
+                  <div className="h-full">
+                    <LosersElevator 
+                      losers={marketData.losers} 
+                      onSymbolClick={onSymbolSelect} 
+                      fullWidth={true}
+                    />
+                  </div>
+                )}
               </div>
-            </>
-          )}
+            </TabsContent>
+            
+            <TabsContent value="up" className="mt-0">
+              <div className="p-4 h-[calc(100vh-300px)] overflow-hidden">
+                {marketData && (
+                  <div className="h-full">
+                    <GainersStairs 
+                      gainers={marketData.gainers} 
+                      onSymbolClick={onSymbolSelect}
+                      fullWidth={true}
+                    />
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       )}
-      
-      <SymbolDetail
-        symbol={selectedSymbol}
-        isOpen={detailsOpen}
-        onClose={() => setDetailsOpen(false)}
-      />
     </div>
   );
 };

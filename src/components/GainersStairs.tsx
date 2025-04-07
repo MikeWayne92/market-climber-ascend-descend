@@ -1,14 +1,15 @@
 
 import React from "react";
 import { MarketSymbol } from "../services/alphaVantageService";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, ArrowUp } from "lucide-react";
 
 interface GainersStairsProps {
   gainers: MarketSymbol[];
   onSymbolClick: (symbol: MarketSymbol) => void;
+  fullWidth?: boolean;
 }
 
-const GainersStairs: React.FC<GainersStairsProps> = ({ gainers, onSymbolClick }) => {
+const GainersStairs: React.FC<GainersStairsProps> = ({ gainers, onSymbolClick, fullWidth = false }) => {
   // Create an array for our stairs
   const stairCount = 10;
   const stairs = Array.from({ length: stairCount }, (_, i) => i);
@@ -33,6 +34,15 @@ const GainersStairs: React.FC<GainersStairsProps> = ({ gainers, onSymbolClick })
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-market-grid"></div>
         <div className="absolute right-0 top-0 bottom-0 w-1 bg-market-grid"></div>
         
+        {/* Horizontal grid lines */}
+        {stairs.map((stair) => (
+          <div 
+            key={`line-${stair}`} 
+            className="absolute left-0 right-0 h-[1px] bg-market-grid opacity-20" 
+            style={{ top: `${(stair + 1) * 100 / stairCount}%` }}
+          ></div>
+        ))}
+        
         {/* Stairs container */}
         <div className="absolute inset-0 flex flex-col-reverse justify-between p-4">
           {stairs.map((stair) => (
@@ -52,9 +62,12 @@ const GainersStairs: React.FC<GainersStairsProps> = ({ gainers, onSymbolClick })
               {/* Symbol on stair (if assigned) */}
               {assignedStairs[stair] && (
                 <div 
-                  className="gainer-symbol ml-4 bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-up hover:animate-bounce-up cursor-pointer hover:bg-gray-800"
+                  className="gainer-symbol ml-4 bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-up hover:animate-bounce-up cursor-pointer hover:bg-gray-800 group relative"
                   onClick={() => onSymbolClick(assignedStairs[stair])}
                 >
+                  <div className="absolute -top-2 -right-2 bg-market-up text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowUp size={12} />
+                  </div>
                   <div className="font-bold text-lg">{assignedStairs[stair].symbol}</div>
                   <div className="text-market-up font-mono">
                     +{assignedStairs[stair].change.toFixed(2)}

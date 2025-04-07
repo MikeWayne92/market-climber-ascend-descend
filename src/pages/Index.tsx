@@ -1,8 +1,18 @@
 
-import React from "react";
+import React, { useState } from "react";
 import MarketTicker from "../components/MarketTicker";
+import { MarketSymbol } from "../services/alphaVantageService";
+import StockPanel from "../components/StockPanel";
 
 const Index: React.FC = () => {
+  const [selectedSymbol, setSelectedSymbol] = useState<MarketSymbol | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+
+  const handleSymbolSelect = (symbol: MarketSymbol) => {
+    setSelectedSymbol(symbol);
+    setIsPanelOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-market-dark flex flex-col">
       <header className="py-4 px-6 bg-gray-900 border-b border-market-grid">
@@ -18,10 +28,16 @@ const Index: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-1 container mx-auto p-4">
+      <main className="flex-1 container mx-auto p-4 relative">
         <div className="h-[calc(100vh-180px)]">
-          <MarketTicker />
+          <MarketTicker onSymbolSelect={handleSymbolSelect} />
         </div>
+        
+        <StockPanel 
+          symbol={selectedSymbol} 
+          isOpen={isPanelOpen} 
+          onClose={() => setIsPanelOpen(false)} 
+        />
       </main>
       
       <footer className="py-3 px-6 bg-gray-900 border-t border-market-grid">
