@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import StockChart from "./StockChart";
 
 interface StockPanelProps {
   symbol: MarketSymbol | null;
@@ -26,6 +27,7 @@ const StockPanel: React.FC<StockPanelProps> = ({ symbol, isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const [moreInfo, setMoreInfo] = useState<any>(null);
+  const [timeframe, setTimeframe] = useState<"1D" | "1W" | "1M" | "3M" | "1Y">("1D");
 
   useEffect(() => {
     if (symbol && isOpen) {
@@ -103,7 +105,7 @@ const StockPanel: React.FC<StockPanelProps> = ({ symbol, isOpen, onClose }) => {
         </SheetHeader>
         
         <div className="p-6">
-          <Tabs defaultValue="overview">
+          <Tabs defaultValue="chart">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="overview" className="flex gap-1 items-center">
                 <Info size={14} />
@@ -225,14 +227,28 @@ const StockPanel: React.FC<StockPanelProps> = ({ symbol, isOpen, onClose }) => {
             
             <TabsContent value="chart" className="pt-4">
               <Card>
-                <CardContent className="p-5 min-h-[300px] flex items-center justify-center">
-                  <div className="text-center text-market-neutral">
-                    <BarChart3 size={48} className="mx-auto mb-3 opacity-40" />
-                    <p>Detailed chart data available with premium API subscription.</p>
-                    <Button variant="outline" size="sm" className="mt-4">
-                      Upgrade to Premium
-                    </Button>
+                <CardContent className="p-5">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-sm font-medium">Price History</h3>
+                    <div className="flex gap-2">
+                      {["1D", "1W", "1M", "3M", "1Y"].map((tf) => (
+                        <Button
+                          key={tf}
+                          size="sm"
+                          variant={timeframe === tf ? "default" : "outline"}
+                          className={`h-7 px-2 text-xs ${
+                            timeframe === tf ? 
+                              (isGainer ? "bg-market-up hover:bg-market-up/90" : "bg-market-down hover:bg-market-down/90") : 
+                              "bg-transparent"
+                          }`}
+                          onClick={() => setTimeframe(tf as "1D" | "1W" | "1M" | "3M" | "1Y")}
+                        >
+                          {tf}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
+                  <StockChart symbol={symbol} timeframe={timeframe} />
                 </CardContent>
               </Card>
             </TabsContent>
