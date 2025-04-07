@@ -20,6 +20,7 @@ const MarketTicker: React.FC = () => {
 
   // Fetch market data on component mount and periodically
   useEffect(() => {
+    console.log("MarketTicker component mounted");
     getMarketData();
     
     // Set up periodic refresh
@@ -35,10 +36,17 @@ const MarketTicker: React.FC = () => {
     setError(null);
     
     try {
+      console.log("Fetching market data...");
       const data = await fetchMarketMovers();
+      console.log("Market data received:", data);
+      
+      if (!data.gainers.length && !data.losers.length) {
+        throw new Error("No market data available");
+      }
+      
       setMarketData(data);
       
-      if (!showLoading) {
+      if (!showLoading && !refreshing) {
         toast({
           title: "Market data updated",
           description: `Latest data as of ${new Date().toLocaleTimeString()}`,
@@ -46,7 +54,7 @@ const MarketTicker: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error fetching market data:", error);
+      console.error("Error in getMarketData:", error);
       setError("Failed to fetch market data. Please try again later.");
       
       toast({
@@ -72,6 +80,7 @@ const MarketTicker: React.FC = () => {
 
   // Handle symbol click to open details
   const handleSymbolClick = (symbol: MarketSymbol) => {
+    console.log("Symbol clicked:", symbol);
     setSelectedSymbol(symbol);
     setDetailsOpen(true);
   };

@@ -19,7 +19,9 @@ const Index: React.FC = () => {
       </header>
 
       <main className="flex-1 container mx-auto p-4">
-        <MarketTicker />
+        <div className="h-[calc(100vh-180px)]">
+          <MarketTicker />
+        </div>
       </main>
       
       <footer className="py-3 px-6 bg-gray-900 border-t border-market-grid">
