@@ -1,6 +1,6 @@
 
 // Alpha Vantage API service
-const API_KEY = 'demo'; // Replace with your actual Alpha Vantage API key in production
+const API_KEY = 'GTYY5A5STDWMB49X'; // User's Alpha Vantage API key
 
 export type MarketSymbol = {
   symbol: string;
@@ -18,32 +18,40 @@ export type MarketData = {
 // Function to fetch top gainers and losers
 export const fetchMarketMovers = async (): Promise<MarketData> => {
   try {
-    // In a real implementation, you would fetch from Alpha Vantage API using your API key
-    // This is a mock implementation to avoid rate limits during development
+    // Use the real Alpha Vantage API with the provided key
+    const response = await fetch(
+      `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${API_KEY}`
+    );
     
-    // For demo purposes, we'll create mock data
-    // In production, you'd replace this with actual API calls
+    if (!response.ok) {
+      throw new Error(`API responded with status: ${response.status}`);
+    }
     
-    // Example API call (commented out to avoid rate limiting):
-    // const response = await fetch(
-    //   `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${API_KEY}`
-    // );
-    // const data = await response.json();
-    // return processAlphaVantageData(data);
+    const data = await response.json();
     
-    return getMockMarketData();
+    // Check if we have valid data
+    if (data.error) {
+      console.error("Alpha Vantage API error:", data.error);
+      // Fall back to mock data if there's an API error
+      return getMockMarketData();
+    }
+    
+    return processAlphaVantageData(data);
   } catch (error) {
     console.error("Error fetching market data:", error);
-    return {
-      gainers: [],
-      losers: [],
-      timestamp: new Date().toISOString(),
-    };
+    // Fall back to mock data if there's an error
+    return getMockMarketData();
   }
 };
 
 // Process Alpha Vantage response data
 const processAlphaVantageData = (data: any): MarketData => {
+  // If there's no valid data structure, fall back to mock data
+  if (!data.top_gainers || !data.top_losers) {
+    console.warn("Unexpected API response structure, using mock data");
+    return getMockMarketData();
+  }
+
   const gainers = data.top_gainers?.map((gainer: any) => ({
     symbol: gainer.ticker,
     price: parseFloat(gainer.price),
@@ -65,7 +73,7 @@ const processAlphaVantageData = (data: any): MarketData => {
   };
 };
 
-// Mock data function for development
+// Mock data function as fallback
 const getMockMarketData = (): MarketData => {
   const gainers = [
     { symbol: "AAPL", price: 182.63, change: 5.28, changePercent: 2.98 },

@@ -5,9 +5,10 @@ import { TrendingDown } from "lucide-react";
 
 interface LosersElevatorProps {
   losers: MarketSymbol[];
+  onSymbolClick: (symbol: MarketSymbol) => void;
 }
 
-const LosersElevator: React.FC<LosersElevatorProps> = ({ losers }) => {
+const LosersElevator: React.FC<LosersElevatorProps> = ({ losers, onSymbolClick }) => {
   const [doorsOpen, setDoorsOpen] = useState<boolean>(false);
   const [currentFloor, setCurrentFloor] = useState<number>(10);
 
@@ -68,8 +69,9 @@ const LosersElevator: React.FC<LosersElevatorProps> = ({ losers }) => {
               {losers.slice(0, 6).map((loser, index) => (
                 <div
                   key={loser.symbol}
-                  className="loser-symbol bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-down animate-shift-down"
+                  className="loser-symbol bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-down animate-shift-down cursor-pointer hover:bg-gray-800"
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => onSymbolClick(loser)}
                 >
                   <div className="font-bold text-lg">{loser.symbol}</div>
                   <div className="text-market-down font-mono">

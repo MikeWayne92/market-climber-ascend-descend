@@ -5,9 +5,10 @@ import { TrendingUp } from "lucide-react";
 
 interface GainersStairsProps {
   gainers: MarketSymbol[];
+  onSymbolClick: (symbol: MarketSymbol) => void;
 }
 
-const GainersStairs: React.FC<GainersStairsProps> = ({ gainers }) => {
+const GainersStairs: React.FC<GainersStairsProps> = ({ gainers, onSymbolClick }) => {
   // Create an array for our stairs
   const stairCount = 10;
   const stairs = Array.from({ length: stairCount }, (_, i) => i);
@@ -51,7 +52,8 @@ const GainersStairs: React.FC<GainersStairsProps> = ({ gainers }) => {
               {/* Symbol on stair (if assigned) */}
               {assignedStairs[stair] && (
                 <div 
-                  className="gainer-symbol ml-4 bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-up hover:animate-bounce-up"
+                  className="gainer-symbol ml-4 bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-up hover:animate-bounce-up cursor-pointer hover:bg-gray-800"
+                  onClick={() => onSymbolClick(assignedStairs[stair])}
                 >
                   <div className="font-bold text-lg">{assignedStairs[stair].symbol}</div>
                   <div className="text-market-up font-mono">

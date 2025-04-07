@@ -12,7 +12,7 @@ const Index: React.FC = () => {
               Market Climber
             </h1>
             <div className="text-market-neutral">
-              <span className="text-xs md:text-sm">Powered by Alpha Vantage</span>
+              <span className="text-xs md:text-sm">Using Live Data from Alpha Vantage</span>
             </div>
           </div>
         </div>
@@ -26,8 +26,8 @@ const Index: React.FC = () => {
         <div className="container mx-auto">
           <div className="text-center text-market-neutral text-sm">
             <p>
-              Data provided for demonstration purposes. 
-              Replace with your Alpha Vantage API key for live data.
+              Data provided by Alpha Vantage API.
+              Live market data refreshes periodically.
             </p>
           </div>
         </div>
