@@ -1,73 +1,114 @@
-# Welcome to your Lovable project
+# Market Climber 📈
 
-## Project info
+A real-time stock market visualization tool that displays market movers in an engaging and interactive way.
 
-**URL**: https://lovable.dev/projects/dc9a59b6-bb2c-4e16-bc5a-723549729a8d
+![Market Climber Preview](public/android-chrome-192x192.png)
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+### Real-Time Market Data
+- Live tracking of market gainers and losers
+- Integration with Alpha Vantage API
+- Automatic data refresh
+- Detailed stock information and charts
 
-**Use Lovable**
+### Interactive Visualizations
+- **Gainers Stairs** 🏃‍♂️: Ascending staircase visualization for top gaining stocks
+- **Losers Elevator** 🔻: Elevator-style display for declining stocks
+- Interactive stock panels with detailed information
+- Responsive and animated UI elements
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/dc9a59b6-bb2c-4e16-bc5a-723549729a8d) and start prompting.
+### Technical Features
+- Real-time data updates
+- Responsive design for all devices
+- Dark mode optimized interface
+- Interactive charts and graphs
+- Smooth animations and transitions
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technology Stack
 
-**Use your preferred IDE**
+- **Frontend Framework**: React with TypeScript
+- **Build Tool**: Vite
+- **Styling**: 
+  - Tailwind CSS for utility-first styling
+  - shadcn-ui for component library
+- **Data Visualization**: Recharts
+- **State Management**: React Query
+- **API Integration**: Alpha Vantage API
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn package manager
+- Alpha Vantage API key
 
-Follow these steps:
+### Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Clone the repository:
+```bash
+git clone https://github.com/MikeWayne92/market-climber-ascend-descend.git
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. Navigate to project directory:
+```bash
+cd market-climber-ascend-descend
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+3. Install dependencies:
+```bash
+npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Usage
 
-**Use GitHub Codespaces**
+1. **View Market Movers**:
+   - See top gainers in an ascending staircase visualization
+   - View top losers in an elevator-style display
+   - Toggle between different views using the tab system
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+2. **Interact with Stocks**:
+   - Click on any stock to view detailed information
+   - View price charts and key statistics
+   - Monitor real-time price changes
 
-## What technologies are used for this project?
+3. **Customize Views**:
+   - Switch between different timeframes
+   - Toggle between full and split views
+   - Access detailed stock information panels
 
-This project is built with:
+## Development
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Available Scripts
 
-## How can I deploy this project?
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-Simply open [Lovable](https://lovable.dev/projects/dc9a59b6-bb2c-4e16-bc5a-723549729a8d) and click on Share -> Publish.
+### Project Structure
 
-## Can I connect a custom domain to my Lovable project?
+## Contributing
 
-Yes it is!
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## License
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Alpha Vantage](https://www.alphavantage.co/) for providing market data API
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework

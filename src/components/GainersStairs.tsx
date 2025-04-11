@@ -1,4 +1,3 @@
-
 import React from "react";
 import { MarketSymbol } from "../services/alphaVantageService";
 import { TrendingUp, ArrowUp } from "lucide-react";
@@ -45,40 +44,50 @@ const GainersStairs: React.FC<GainersStairsProps> = ({ gainers, onSymbolClick, f
         
         {/* Stairs container */}
         <div className="absolute inset-0 flex flex-col-reverse justify-between p-4">
-          {stairs.map((stair) => (
-            <div 
-              key={stair} 
-              className="stair flex items-center px-3"
-              style={{
-                height: `calc(100% / ${stairCount} - 5px)`,
-                zIndex: stair
-              }}
-            >
-              {/* Stair number */}
-              <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-market-grid text-market-neutral">
-                {stair + 1}
-              </div>
-              
-              {/* Symbol on stair (if assigned) */}
-              {assignedStairs[stair] && (
-                <div 
-                  className="gainer-symbol ml-4 bg-market-dark bg-opacity-80 p-3 rounded-lg border border-market-up hover:animate-bounce-up cursor-pointer hover:bg-gray-800 group relative"
-                  onClick={() => onSymbolClick(assignedStairs[stair])}
-                >
-                  <div className="absolute -top-2 -right-2 bg-market-up text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ArrowUp size={12} />
-                  </div>
-                  <div className="font-bold text-lg">{assignedStairs[stair].symbol}</div>
-                  <div className="text-market-up font-mono">
-                    +{assignedStairs[stair].change.toFixed(2)}
-                  </div>
-                  <div className="text-market-up text-xs">
-                    +{assignedStairs[stair].changePercent.toFixed(2)}%
-                  </div>
+          {stairs.map((stair) => {
+            // Calculate stagger offset based on stair position
+            const staggerOffset = `${stair * 5}%`;
+            
+            return (
+              <div 
+                key={stair} 
+                className="stair flex items-center px-3"
+                style={{
+                  height: `calc(100% / ${stairCount} - 5px)`,
+                  zIndex: stairCount - stair,
+                  transform: `translateX(${staggerOffset})`,
+                  transition: 'transform 0.3s ease-in-out'
+                }}
+              >
+                {/* Stair number */}
+                <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-market-grid text-market-neutral">
+                  {stair + 1}
                 </div>
-              )}
-            </div>
-          ))}
+                
+                {/* Symbol on stair (if assigned) */}
+                {assignedStairs[stair] && (
+                  <div 
+                    className="gainer-symbol ml-4 bg-market-dark bg-opacity-90 p-3 rounded-lg border border-market-up hover:animate-bounce-up cursor-pointer hover:bg-gray-800 group relative backdrop-blur-sm"
+                    onClick={() => onSymbolClick(assignedStairs[stair])}
+                    style={{
+                      boxShadow: '0 0 15px rgba(34, 197, 94, 0.1)'
+                    }}
+                  >
+                    <div className="absolute -top-2 -right-2 bg-market-up text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ArrowUp size={12} />
+                    </div>
+                    <div className="font-bold text-lg text-white">{assignedStairs[stair].symbol}</div>
+                    <div className="text-market-up font-mono">
+                      +{assignedStairs[stair].change.toFixed(2)}
+                    </div>
+                    <div className="text-market-up text-xs">
+                      +{assignedStairs[stair].changePercent.toFixed(2)}%
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
